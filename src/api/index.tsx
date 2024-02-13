@@ -19,7 +19,7 @@ interface ISalesChart {
 }
 
 interface ICustomers {
-  id?: number;
+  id?: number | string;
   name: string;
   email: string;
   age: number;
@@ -155,13 +155,11 @@ export const getCustomers = async (): Promise<any> => {
 };
 
 export const postNewCustomer = async (data: ICustomers): Promise<any> => {
-  console.log("param data = ", data);
-
   const customerData = await getCustomers();
 
   // Get the latest 'id'
   const latestId: number = Number(customerData[0].id);
-  data.id = latestId + 1;
+  data.id = String(latestId + 1);
 
   if (data !== null) {
     return await fetch(`${baseUrl}/customers`, {
@@ -172,6 +170,37 @@ export const postNewCustomer = async (data: ICustomers): Promise<any> => {
       body: JSON.stringify(data),
     }).then(async () => {
       return createResponse(201, "Create new customer success.", []);
+    });
+  } else {
+    return createResponse(500, "Internal error.", []);
+  }
+};
+
+export const deleteCustomer = async (id?: number): Promise<any> => {
+  fetch(`${baseUrl}/customers/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((response) => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    } else {
+      return response.json();
+    }
+  });
+};
+
+export const patchDataCustomer = async (data: ICustomers): Promise<any> => {
+  if (data !== null) {
+    return await fetch(`${baseUrl}/customers/${data.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }).then(async () => {
+      return createResponse(200, "Edit customer success.", []);
     });
   } else {
     return createResponse(500, "Internal error.", []);
