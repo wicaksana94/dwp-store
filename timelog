@@ -3,4 +3,5 @@ friday
 saturday
 13:30 - 15:30 : dwp login register simulation, dashboard template, sidemenu
 tuesday
-08:30 - 10:40 : dwp logout, chart api integration, order table integration, recent deposit integration
+08:30 - 10:40 : dwp logout, chart api integration, order table integration in dashboard, recent deposit integration in dashboard
+16:00 - 18:00 : data integration in order table in the transaksi menu, data integration in customer table in the customer menu

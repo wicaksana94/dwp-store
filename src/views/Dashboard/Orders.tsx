@@ -6,9 +6,9 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "./Title";
-import { getOrders } from "../../api";
+import { getTransactions } from "../../api";
 
-interface IOrders {
+interface ITransactionData {
   id: number;
   date: string;
   name: string;
@@ -16,41 +16,41 @@ interface IOrders {
   amount: number;
 }
 
-function preventDefault(event: React.MouseEvent) {
-  event.preventDefault();
-}
-
 export default function Orders() {
-  const [ordersData, setOrdersData] = React.useState<IOrders[]>([]);
+  const [transactionData, setTransactionData] = React.useState<
+    ITransactionData[]
+  >([]);
 
   React.useEffect(() => {
-    reqGetOrders();
+    reqGetTransactions();
   }, []);
 
-  async function reqGetOrders() {
-    const reqSalesData = await getOrders(3);
-    setOrdersData(reqSalesData);
+  async function reqGetTransactions() {
+    const reqSalesData = await getTransactions(3);
+    setTransactionData(reqSalesData);
   }
 
   return (
     <React.Fragment>
-      <Title>Recent Orders</Title>
+      <Title>Recent Transactions</Title>
       <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell>Date</TableCell>
             <TableCell>Name</TableCell>
             <TableCell>Payment Method</TableCell>
-            <TableCell align="right">Sale Amount</TableCell>
+            <TableCell align="right">Amount</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {ordersData.map((row) => (
+          {transactionData.map((row) => (
             <TableRow key={row.id}>
               <TableCell>{row.date}</TableCell>
               <TableCell>{row.name}</TableCell>
               <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell align="right">{`Rp ${row.amount}`}</TableCell>
+              <TableCell align="right">{`${row.amount.toLocaleString(
+                "id-ID"
+              )}`}</TableCell>
             </TableRow>
           ))}
         </TableBody>

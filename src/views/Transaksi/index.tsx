@@ -1,16 +1,19 @@
 import * as React from "react";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import { Typography } from "@mui/material";
+import {
+  Typography,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+} from "@mui/material";
+import { getTransactions } from "../../api";
 
 interface Column {
-  id: "date" | "productName" | "paymentMethod" | "sale" | "amount";
+  id: "date" | "name" | "paymentMethod" | "amount" | "orderedBy";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -19,42 +22,48 @@ interface Column {
 
 const columns: readonly Column[] = [
   { id: "date", label: "Date", minWidth: 100 },
-  { id: "productName", label: "Product Name", minWidth: 170 },
+  { id: "name", label: "Product Name", minWidth: 170 },
   {
     id: "paymentMethod",
     label: "Payment Method",
     minWidth: 170,
-    align: "right",
-    format: (value: number) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "sale",
-    label: "Sale",
-    minWidth: 170,
-    align: "right",
-    format: (value: number) => value.toLocaleString("en-US"),
   },
   {
     id: "amount",
     label: "Amount",
+    minWidth: 130,
+    format: (value: number) => value.toLocaleString("id-ID"),
+  },
+  {
+    id: "orderedBy",
+    label: "Ordered By",
     minWidth: 170,
-    align: "right",
-    format: (value: number) => value.toFixed(2),
   },
 ];
 
-interface TransactionData {
+interface ITransactionData {
   date: string;
-  productName: string;
+  name: string;
   paymentMethod: string;
   sale: number;
   amount: number;
 }
 
 export default function Transaksi() {
+  const [transactionData, setTransactionData] = React.useState<
+    ITransactionData[]
+  >([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
+  React.useEffect(() => {
+    reqGetTransactions();
+  }, []);
+
+  async function reqGetTransactions() {
+    const reqSalesData = await getTransactions();
+    setTransactionData(reqSalesData);
+  }
   const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -65,6 +74,7 @@ export default function Transaksi() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
   return (
     <>
       <Typography
@@ -91,16 +101,11 @@ export default function Transaksi() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows
+              {transactionData
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
+                .map((row, index) => {
                   return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.code}
-                    >
+                    <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                       {columns.map((column) => {
                         const value = row[column.id];
                         return (
@@ -120,7 +125,7 @@ export default function Transaksi() {
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
-          count={rows.length}
+          count={transactionData.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

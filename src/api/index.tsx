@@ -19,6 +19,16 @@ interface ISalesChart {
   amount?: number;
 }
 
+interface ICustomers {
+  id: number;
+  name: string;
+  email: string;
+  age: number;
+  gender: string;
+  address: string;
+  phone: string;
+}
+
 interface IOrders {
   id: number;
   date: string;
@@ -32,6 +42,14 @@ interface IRecentTopup {
   date: string;
   name: string;
   paymentMethod: string;
+  amount: number;
+}
+
+interface ITransactionData {
+  date: string;
+  productName: string;
+  paymentMethod: string;
+  sale: number;
   amount: number;
 }
 
@@ -162,7 +180,7 @@ export const getTodaySalesChart = async (limit: number): Promise<any> => {
   return res;
 };
 
-export const getOrders = async (limit: number): Promise<any> => {
+export const getTransactions = async (limit?: number): Promise<any> => {
   const res: IOrders[] = await fetch(`${baseUrl}/orders?_limit=${limit}`, {
     method: "GET",
     headers: {
@@ -174,6 +192,16 @@ export const getOrders = async (limit: number): Promise<any> => {
 
 export const getRecentTopup = async (): Promise<any> => {
   const res: IRecentTopup[] = await fetch(`${baseUrl}/recent-topup?_limit=1`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((response) => response.json());
+  return res;
+};
+
+export const getCustomers = async (): Promise<any> => {
+  const res: ICustomers[] = await fetch(`${baseUrl}/customers`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
