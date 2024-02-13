@@ -1,6 +1,6 @@
 This file will explain how to run the app:
 
-````markdown
+```markdown
 # React App
 
 This project is a simple React application.
@@ -11,6 +11,7 @@ Before you can run the app, make sure you have the following installed on your m
 
 - [Node.js](https://nodejs.org/)
 - [npm](https://www.npmjs.com/) (Node Package Manager)
+```
 
 ## Installation
 
@@ -19,7 +20,6 @@ Before you can run the app, make sure you have the following installed on your m
    ```bash
    git clone https://github.com/wicaksana94/dwp-store.git
    ```
-````
 
 2. Navigate to the project directory:
 
