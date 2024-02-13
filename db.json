@@ -1,0 +1,91 @@
+{
+  "posts": [
+    {
+      "id": "1",
+      "title": "a title",
+      "views": 100
+    },
+    {
+      "id": "2",
+      "title": "another title",
+      "views": 200
+    }
+  ],
+  "comments": [
+    {
+      "id": "1",
+      "text": "a comment about post 1",
+      "postId": "1"
+    },
+    {
+      "id": "2",
+      "text": "another comment about post 1",
+      "postId": "1"
+    }
+  ],
+  "users": [
+    {
+      "id": "4b6c",
+      "email": "ikoafianando123@gmail.com",
+      "password": "ikoafianando"
+    }
+  ],
+  "sales-chart": [
+    { "time": "00:00", "amount": 0 },
+    { "time": "03:00", "amount": 300000 },
+    { "time": "06:00", "amount": 600000 },
+    { "time": "09:00", "amount": 800000 },
+    { "time": "12:00", "amount": 1500000 },
+    { "time": "15:00", "amount": 2000000 },
+    { "time": "18:00", "amount": 1400000 },
+    { "time": "21:00", "amount": 400000 },
+    { "time": "22:00", "amount": 2000000 },
+    { "time": "24:00", "amount": null }
+  ],
+  "orders": [
+    {
+      "id": 0,
+      "date": "16 Feb 2024",
+      "name": "Indosat Freedom 50",
+      "paymentMethod": "Gopay ⠀•••• 3719",
+      "amount": 50000
+    },
+    {
+      "id": 1,
+      "date": "16 Feb 2024",
+      "name": "Telkomsel 2GB Lokal",
+      "paymentMethod": "Gopay ⠀•••• 2574",
+      "amount": 10000
+    },
+    {
+      "id": 2,
+      "date": "16 Feb 2024",
+      "name": "3 Paket Bulanan 50GB",
+      "paymentMethod": "OVO ⠀•••• 1253",
+      "amount": 100000
+    },
+    {
+      "id": 3,
+      "date": "16 Feb 2024",
+      "name": "Axis Bronet 4GB",
+      "paymentMethod": "Dana ⠀•••• 5460",
+      "amount": 25000
+    },
+    {
+      "id": 4,
+      "date": "15 Feb 2024",
+      "name": "Indosat Freedom 20",
+      "paymentMethod": "Gopay ⠀•••• 5919",
+      "amount": 20000
+    }
+  ],
+  "recent-topup": [
+    {
+      "id": "7aawr27we8fewhi",
+      "date": "13 Feb 2024",
+      "name": "Arief Moektito",
+      "paymentMethod": "Gopay ⠀•••• 3719",
+      "amount": 125000
+    }
+  ]
+}
