@@ -47,6 +47,7 @@ interface ITransactionData {
   paymentMethod: string;
   sale: number;
   amount: number;
+  orderedBy: string;
 }
 
 export default function Transaksi() {

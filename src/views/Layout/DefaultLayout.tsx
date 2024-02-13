@@ -23,9 +23,9 @@ import {
   Divider,
   IconButton,
   Container,
-  Link,
+  Snackbar,
 } from "@mui/material";
-import { useUserStore } from "../../store";
+import { useUserStore, useToastStore } from "../../store";
 import { useNavigate } from "react-router-dom";
 
 function Copyright(props: any) {
@@ -102,6 +102,7 @@ export default function DefaultLayout() {
   const [open, setOpen] = React.useState(true);
   const [openLogoutDialog, setOpenLogoutDialog] = React.useState(false);
   const { user, logoffUser } = useUserStore();
+  const { isOpenToast, messageToast, setIsOpenToast } = useToastStore();
   const navigate = useNavigate();
 
   const toggleDrawer = () => {
@@ -156,6 +157,14 @@ export default function DefaultLayout() {
   return (
     <ThemeProvider theme={defaultTheme}>
       {openLogoutDialog && <LogoutAlert />}
+      {isOpenToast && (
+        <Snackbar
+          autoHideDuration={3000}
+          open={isOpenToast}
+          onClose={() => setIsOpenToast(false)}
+          message={messageToast}
+        />
+      )}
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar position="absolute" open={open}>

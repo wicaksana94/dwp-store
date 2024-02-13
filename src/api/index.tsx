@@ -1,5 +1,4 @@
 const baseUrl = "http://localhost:3000"; //import.meta.env.VITE_BASE_URL;
-const token: string = localStorage.getItem("token")!; //non-null assertion
 
 interface IUser {
   id?: string;
@@ -20,7 +19,7 @@ interface ISalesChart {
 }
 
 interface ICustomers {
-  id: number;
+  id?: number;
   name: string;
   email: string;
   age: number;
@@ -29,12 +28,14 @@ interface ICustomers {
   phone: string;
 }
 
-interface IOrders {
-  id: number;
+interface ITransactionData {
+  id?: string;
   date: string;
   name: string;
   paymentMethod: string;
+  sale?: number;
   amount: number;
+  orderedBy: string;
 }
 
 interface IRecentTopup {
@@ -44,66 +45,6 @@ interface IRecentTopup {
   paymentMethod: string;
   amount: number;
 }
-
-interface ITransactionData {
-  date: string;
-  productName: string;
-  paymentMethod: string;
-  sale: number;
-  amount: number;
-}
-
-interface Params {
-  baseUrl: string;
-  headers: any;
-  method: string;
-}
-
-const postConfig: Params = {
-  baseUrl: baseUrl,
-  headers: {
-    Authorization: `Bearer ${token}`,
-    // Cookie: cookie_token,
-  },
-  method: "post",
-};
-
-const postUploadConfig: Params = {
-  baseUrl: baseUrl,
-  headers: {
-    Authorization: `Bearer ${token}`,
-    "Content-Type": "multipart/form-data",
-    // Cookie: cookie_token,
-  },
-  method: "post",
-};
-
-const getConfig: Params = {
-  baseUrl: baseUrl,
-  headers: {
-    Authorization: `Bearer ${token}`,
-    // Cookie: cookie_token,
-  },
-  method: "get",
-};
-
-const patchConfig: Params = {
-  baseUrl: baseUrl,
-  headers: {
-    Authorization: `Bearer ${token}`,
-    // Cookie: cookie_token,
-  },
-  method: "patch",
-};
-
-const putConfig: Params = {
-  baseUrl: baseUrl,
-  headers: {
-    Authorization: `Bearer ${token}`,
-    // Cookie: cookie_token,
-  },
-  method: "put",
-};
 
 export const createResponse = async (
   code: number,
@@ -181,12 +122,15 @@ export const getTodaySalesChart = async (limit: number): Promise<any> => {
 };
 
 export const getTransactions = async (limit?: number): Promise<any> => {
-  const res: IOrders[] = await fetch(`${baseUrl}/orders?_limit=${limit}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }).then((response) => response.json());
+  const res: ITransactionData[] = await fetch(
+    `${baseUrl}/orders?_limit=${limit}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  ).then((response) => response.json());
   return res;
 };
 
@@ -207,5 +151,29 @@ export const getCustomers = async (): Promise<any> => {
       "Content-Type": "application/json",
     },
   }).then((response) => response.json());
-  return res;
+  return res.reverse();
+};
+
+export const postNewCustomer = async (data: ICustomers): Promise<any> => {
+  console.log("param data = ", data);
+
+  const customerData = await getCustomers();
+
+  // Get the latest 'id'
+  const latestId: number = Number(customerData[0].id);
+  data.id = latestId + 1;
+
+  if (data !== null) {
+    return await fetch(`${baseUrl}/customers`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }).then(async () => {
+      return createResponse(201, "Create new customer success.", []);
+    });
+  } else {
+    return createResponse(500, "Internal error.", []);
+  }
 };
