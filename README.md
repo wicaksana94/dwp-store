@@ -1,30 +1,56 @@
-# React + TypeScript + Vite
+This file will explain how to run the app:
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+````markdown
+# React App
 
-Currently, two official plugins are available:
+This project is a simple React application.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Prerequisites
 
-## Expanding the ESLint configuration
+Before you can run the app, make sure you have the following installed on your machine:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- [Node.js](https://nodejs.org/)
+- [npm](https://www.npmjs.com/) (Node Package Manager)
 
-- Configure the top-level `parserOptions` property like this:
+## Installation
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+1. Clone this repository to your local machine:
+
+   ```bash
+   git clone https://github.com/wicaksana94/dwp-store.git
+   ```
+````
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd dwp-store
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+## Running the App
+
+Once the installation is complete, you can run the app using the following command:
+
+```bash
+npm run start
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+This will start the development react vite server and json-server simultaneously.
+
+## Accessing the App
+
+Open your web browser and go to [http://localhost:5173](http://localhost:5173). You should see the app running.
+
+## Available Scripts
+
+In the project directory, you can run the following scripts:
+
+- `npm run start`: Runs the app and json-server in development mode.
+- `npm run dev`: Launches the react app only.
+- `npm run build`: Builds the app for production to the `build` folder.
