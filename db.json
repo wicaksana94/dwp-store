@@ -1424,76 +1424,13 @@
       "age": 64
     },
     {
-      "id": "130",
-      "name": "Rickard Tatlow",
-      "email": "rtatlow3l@adobe.com",
-      "gender": "Male",
-      "address": "3456 Hollow Ridge Road",
-      "phone": "185-184-7417",
-      "age": 60
-    },
-    {
       "id": "131",
-      "name": "Roberta Fleay",
-      "email": "rfleay3m@cyberchimps.com",
-      "gender": "Female",
-      "address": "31205 Magdeline Point",
-      "phone": "771-575-7514",
-      "age": 36
-    },
-    {
-      "id": "132",
-      "name": "Verena Du Barry",
-      "email": "vdu3n@unblog.fr",
-      "gender": "Female",
-      "address": "64 Buhler Lane",
-      "phone": "567-316-2515",
-      "age": 28
-    },
-    {
-      "id": "133",
-      "name": "Farris Bodd",
-      "email": "fbodd3o@harvard.edu",
+      "name": "Arya Wicaksana",
+      "email": "wicaksana94@gmail.com",
+      "address": "Condong Catur, Depok, Sleman, DIY, Indonesia",
+      "age": 31,
       "gender": "Male",
-      "address": "996 Farwell Way",
-      "phone": "982-729-8540",
-      "age": 61
-    },
-    {
-      "id": "134",
-      "name": "Mame Flemmich",
-      "email": "mflemmich3p@seesaa.net",
-      "gender": "Female",
-      "address": "68794 Thierer Avenue",
-      "phone": "703-788-6340",
-      "age": 59
-    },
-    {
-      "id": 135,
-      "name": "Arya Wicaksana",
-      "email": "wicaksana94@gmail.com",
-      "address": "Condong Catur, Depok, Sleman, DIY, Indonesia",
-      "age": 5,
-      "gender": "male",
-      "phone": "+54 364 363"
-    },
-    {
-      "id": 136,
-      "name": "REtasfafs",
-      "email": "wicaksana94@gmail.com",
-      "address": "Condong Catur, Depok, Sleman, DIY, Indonesia",
-      "age": 7,
-      "gender": "female",
-      "phone": "+43 6435 43"
-    },
-    {
-      "id": 137,
-      "name": "Arya Wicaksana",
-      "email": "wicaksana94@gmail.com",
-      "address": "Condong Catur, Depok, Sleman, DIY, Indonesia",
-      "age": 4,
-      "gender": "female",
-      "phone": "+84 564 564 56"
+      "phone": "+65 46465"
     }
   ]
 }

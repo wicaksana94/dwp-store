@@ -23,11 +23,19 @@ import {
   FormLabel,
   RadioGroup,
   FormControl,
+  DialogContentText,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useTheme } from "@mui/material/styles";
 import { MuiTelInput } from "mui-tel-input";
-import { getCustomers, postNewCustomer } from "../../api";
+import {
+  deleteCustomer,
+  getCustomers,
+  patchDataCustomer,
+  postNewCustomer,
+} from "../../api";
 import { DatePicker } from "@mui/x-date-pickers";
 import { differenceInYears, isDate } from "date-fns";
 import { useToastStore } from "../../store";
@@ -90,6 +98,24 @@ export default function Customer() {
   const [age, setAge] = React.useState(0);
   const [gender, setGender] = React.useState("male");
   const [phone, setPhone] = React.useState("");
+  const [selectedCustomer, setSelectedCustomer] = React.useState<ICustomers>();
+  const [
+    openConfirmationManipulationCustomerDataModal,
+    setOpenConfirmationManipulationCustomerDataModal,
+  ] = React.useState(false);
+  const [openConfirmationDeleteCustomer, setOpenConfirmationDeleteCustomer] =
+    React.useState(false);
+  const [openEditCustomerModal, setOpenEditCustomerModa] =
+    React.useState(false);
+
+  const [nameEditCustomer, setNameEditCustomer] = React.useState("");
+  const [emailEditCustomer, setEmailEditCustomer] = React.useState("");
+  const [addressEditCustomer, setAddressEditCustomer] = React.useState("");
+  const [birthdateEditCustomer, setBirthdateEditCustomer] =
+    React.useState(null); // Use the appropriate type for your DatePicker
+  const [ageEditCustomer, setAgeEditCustomer] = React.useState(0);
+  const [genderEditCustomer, setGenderEditCustomer] = React.useState("male");
+  const [phoneEditCustomer, setPhoneEditCustomer] = React.useState("");
 
   const { setMessageToast, setBackgroundClassToast, setIsOpenToast } =
     useToastStore();
@@ -98,12 +124,24 @@ export default function Customer() {
     setName(event.target.value);
   };
 
+  const handleChangeNameEditCustomer = (event: any) => {
+    setNameEditCustomer(event.target.value);
+  };
+
   const handleChangeEmail = (event: any) => {
     setEmail(event.target.value);
   };
 
+  const handleChangeEmailEditCustomer = (event: any) => {
+    setEmailEditCustomer(event.target.value);
+  };
+
   const handleChangeAddress = (event: any) => {
     setAddress(event.target.value);
+  };
+
+  const handleChangeAddressEditCustomer = (event: any) => {
+    setAddressEditCustomer(event.target.value);
   };
 
   const handleChangeBirthdate = (newDate: Date) => {
@@ -116,12 +154,30 @@ export default function Customer() {
     }
   };
 
+  const handleChangeBirthdateEditCustomer = (newDate: Date) => {
+    // @ts-ignore
+    setBirthdateEditCustomer(newDate);
+    if (isDate(newDate)) {
+      // Get the difference in years between the current date and the newDate
+      const yearsDifference = differenceInYears(new Date(), newDate);
+      setAgeEditCustomer(yearsDifference);
+    }
+  };
+
   const handleChangeGender = (event: any) => {
     setGender(event.target.value);
   };
 
+  const handleChangeGenderEditCustomer = (event: any) => {
+    setGenderEditCustomer(event.target.value);
+  };
+
   const handleChangeTelInput = (newPhone: any) => {
     setPhone(newPhone);
+  };
+
+  const handleChangeTelInputEditCustomer = (newPhone: any) => {
+    setPhoneEditCustomer(newPhone);
   };
 
   async function createNewCustomer() {
@@ -147,6 +203,14 @@ export default function Customer() {
     location.reload();
   }
 
+  const handleOpenConfirmationManipulationCustomerDataModal = () => {
+    setOpenConfirmationManipulationCustomerDataModal(true);
+  };
+
+  const handleCloseConfirmationManipulationCustomerDataModal = () => {
+    setOpenConfirmationManipulationCustomerDataModal(false);
+  };
+
   const handleClickOpenCreateNewCustomerModal = () => {
     setOpenCreateNewCustomerModal(true);
   };
@@ -165,7 +229,69 @@ export default function Customer() {
   }
 
   function handleSelectRow(data: ICustomers) {
-    console.log(data);
+    setSelectedCustomer(data);
+    handleOpenConfirmationManipulationCustomerDataModal();
+  }
+
+  function handleOpenEditCustomerModal() {
+    setOpenEditCustomerModa(true);
+  }
+
+  function handleCloseEditCustomerModal() {
+    setOpenEditCustomerModa(false);
+  }
+
+  async function openEditModal() {
+    await handleOpenEditCustomerModal();
+    await handleCloseConfirmationManipulationCustomerDataModal();
+
+    setNameEditCustomer(String(selectedCustomer?.name));
+    setEmailEditCustomer(String(selectedCustomer?.email));
+    setAddressEditCustomer(String(selectedCustomer?.address));
+    setAgeEditCustomer(Number(selectedCustomer?.age));
+    setGenderEditCustomer(String(selectedCustomer?.gender));
+    setPhoneEditCustomer(String(selectedCustomer?.phone));
+  }
+
+  function handleOpenConfirmationDeleteCustomer() {
+    setOpenConfirmationDeleteCustomer(true);
+  }
+
+  function handleCloseConfirmationDeleteCustomer() {
+    setOpenConfirmationDeleteCustomer(false);
+  }
+
+  async function editSelectedRow() {
+    const res = await patchDataCustomer({
+      id: selectedCustomer?.id,
+      name: nameEditCustomer,
+      email: emailEditCustomer,
+      address: addressEditCustomer,
+      age: ageEditCustomer,
+      gender: genderEditCustomer,
+      phone: phoneEditCustomer,
+    });
+    if (res.code === 200) {
+      setMessageToast(res.message);
+      setBackgroundClassToast("green");
+      setIsOpenToast(true);
+    } else {
+      setMessageToast(res.message);
+      setBackgroundClassToast("red");
+      setIsOpenToast(true);
+    }
+
+    await handleCloseEditCustomerModal();
+    await location.reload();
+  }
+
+  async function deleteSelectedRow() {
+    await deleteCustomer(selectedCustomer?.id);
+    await setMessageToast("Customer deleted successfully.");
+    await setBackgroundClassToast("green");
+    await setIsOpenToast(true);
+    await handleCloseConfirmationManipulationCustomerDataModal();
+    await location.reload();
   }
 
   const handleChangePage = (_event: unknown, newPage: number) => {
@@ -181,6 +307,7 @@ export default function Customer() {
 
   return (
     <>
+      {/* Create new customer */}
       <Dialog
         fullScreen={fullScreen}
         open={openCreateNewCustomerModal}
@@ -270,12 +397,12 @@ export default function Customer() {
                 onChange={handleChangeGender}
               >
                 <FormControlLabel
-                  value="male"
+                  value="Male"
                   control={<Radio />}
                   label="Male"
                 />
                 <FormControlLabel
-                  value="female"
+                  value="Female"
                   control={<Radio />}
                   label="Female"
                 />
@@ -303,6 +430,199 @@ export default function Customer() {
           </Button>
           <Button onClick={() => createNewCustomer()} autoFocus>
             Create
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Edit data customer */}
+      <Dialog
+        fullScreen={fullScreen}
+        open={openEditCustomerModal}
+        onClose={handleCloseEditCustomerModal}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {"Edit Customer"}
+        </DialogTitle>
+        <DialogContent>
+          <Box
+            sx={{
+              width: 500,
+              maxWidth: "100%",
+              marginTop: "0.5rem",
+            }}
+          >
+            <TextField
+              fullWidth
+              label="Name"
+              id="name"
+              defaultValue={selectedCustomer?.name}
+              onChange={handleChangeNameEditCustomer}
+            />
+          </Box>
+          <Box
+            sx={{
+              width: 500,
+              maxWidth: "100%",
+              marginTop: "0.5rem",
+            }}
+          >
+            <TextField
+              fullWidth
+              label="Email"
+              id="email"
+              type="email"
+              defaultValue={selectedCustomer?.email}
+              onChange={handleChangeEmailEditCustomer}
+            />
+          </Box>
+          <Box
+            sx={{
+              width: 500,
+              maxWidth: "100%",
+              marginTop: "0.5rem",
+            }}
+          >
+            <TextField
+              fullWidth
+              id="address"
+              label="Address"
+              multiline
+              maxRows={4}
+              defaultValue={selectedCustomer?.address}
+              onChange={handleChangeAddressEditCustomer}
+            />
+          </Box>
+          <Box
+            sx={{
+              width: 500,
+              maxWidth: "100%",
+              marginTop: "0.5rem",
+            }}
+          >
+            <DatePicker
+              label="Birthdate"
+              defaultValue={birthdateEditCustomer}
+              // @ts-ignore
+              onChange={handleChangeBirthdateEditCustomer}
+            />
+          </Box>
+          <Box
+            sx={{
+              width: 500,
+              maxWidth: "100%",
+              marginTop: "0.5rem",
+            }}
+          >
+            <FormControl>
+              <FormLabel id="radio-buttons-group-label">Gender</FormLabel>
+              <RadioGroup
+                row
+                defaultValue="male"
+                name="radio-buttons-group"
+                value={genderEditCustomer}
+                onChange={handleChangeGenderEditCustomer}
+              >
+                <FormControlLabel
+                  value="Male"
+                  control={<Radio />}
+                  label="Male"
+                />
+                <FormControlLabel
+                  value="Female"
+                  control={<Radio />}
+                  label="Female"
+                />
+              </RadioGroup>
+            </FormControl>
+          </Box>
+          <Box
+            sx={{
+              width: 500,
+              maxWidth: "100%",
+              marginTop: "0.5rem",
+            }}
+          >
+            <FormControl>
+              <FormLabel id="phone-label" style={{ marginBottom: "0.75rem" }}>
+                Phone
+              </FormLabel>
+              <MuiTelInput
+                value={phoneEditCustomer}
+                onChange={handleChangeTelInputEditCustomer}
+              />
+            </FormControl>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleCloseEditCustomerModal}>
+            Cancel
+          </Button>
+          <Button onClick={() => editSelectedRow()} autoFocus>
+            Save Edit
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Confirmation Edit or Delete customer */}
+      <Dialog
+        fullScreen={fullScreen}
+        open={openConfirmationManipulationCustomerDataModal}
+        onClose={handleCloseConfirmationManipulationCustomerDataModal}
+      >
+        <DialogTitle id="responsive-confirmation-manipulation-customer-data-dialog-title">
+          {selectedCustomer?.name} ({selectedCustomer?.email})
+        </DialogTitle>
+        <DialogContent>
+          <Box display="flex" justifyContent="center" gap={4} margin={4}>
+            <Button
+              onClick={() => openEditModal()}
+              variant="contained"
+              startIcon={<ModeEditIcon />}
+            >
+              Edit
+            </Button>
+            <Button
+              onClick={() => handleOpenConfirmationDeleteCustomer()}
+              variant="outlined"
+              startIcon={<DeleteIcon />}
+            >
+              Delete
+            </Button>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            autoFocus
+            onClick={handleCloseConfirmationManipulationCustomerDataModal}
+          >
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Confirmation Delete customer */}
+      <Dialog
+        fullScreen={fullScreen}
+        open={openConfirmationDeleteCustomer}
+        onClose={handleCloseConfirmationDeleteCustomer}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {"Delete Confirmation"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure to delete customer {selectedCustomer?.name} with email{" "}
+            {selectedCustomer?.email} ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleCloseConfirmationDeleteCustomer}>
+            Cancel
+          </Button>
+          <Button onClick={() => deleteSelectedRow()} autoFocus>
+            Delete
           </Button>
         </DialogActions>
       </Dialog>
